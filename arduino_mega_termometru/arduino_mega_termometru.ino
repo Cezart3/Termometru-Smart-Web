@@ -16,6 +16,7 @@ void loop() {
   float t = dht.readTemperature();
 
   if (!isnan(h) && !isnan(t)) {
+    
     Serial3.print(t, 1);
     Serial3.print(",");
     Serial3.println(h, 1);
