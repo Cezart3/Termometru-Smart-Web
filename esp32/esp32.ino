@@ -1,25 +1,21 @@
 #include <WiFi.h>
 #include <WebServer.h>
 
-// WiFi Config
 const char* ssid = "iPhoneCezar_14";      
 const char* password = "12345678";  
 
 WebServer server(80);
 
-// Variabile globale
 float temperatura = 0.0;
 float umiditate = 0.0;
 String ultimaActualizare = "Așteptare date...";
 
-// Folosim Hardware Serial 2 (Pin 16 pentru RX)
 HardwareSerial MySerial(2);
 
 void setup() {
   Serial.begin(115200);
   delay(1000);
   
-  // Inițializare Serial pe pinii siguri (RX=16, TX=17)
   MySerial.begin(9600, SERIAL_8N1, 16, 17); 
   
   conecteazaWiFi();
@@ -35,7 +31,6 @@ void setup() {
 void loop() {
   server.handleClient();
 
-  // Verificăm dacă avem date primite de la Mega
   if (MySerial.available()) {
     String linie = MySerial.readStringUntil('\n');
     int virgulaIdx = linie.indexOf(',');
@@ -69,8 +64,6 @@ String getTimestamp() {
   return String(buf);
 }
 
-// --- HANDLERS WEB SERVER (Design original păstrat) ---
-
 void handleRoot() {
   String html = "<!DOCTYPE html><html lang='ro'><head><meta charset='UTF-8'>";
   html += "<meta name='viewport' content='width=device-width, initial-scale=1.0'>";
@@ -96,18 +89,4 @@ void handleRoot() {
 }
 
 void handleData() {
-  String json = "{\"temperatura\":" + String(temperatura, 1) + ",\"umiditate\":" + String(umiditate, 1) + ",\"timestamp\":\"" + ultimaActualizare + "\"}";
-  server.send(200, "application/json", json);
-}
-
-void handleCSS() {
-  String css = "*{margin:0;padding:0;box-sizing:border-box;}body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:20px;}";
-  css += ".container{max-width:900px;margin:0 auto;}header{text-align:center;color:white;margin-bottom:30px;}header h1{font-size:2.5em;margin-bottom:10px;}.subtitle{font-size:1.1em;opacity:0.9;}";
-  css += ".cards-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;margin-bottom:30px;}";
-  css += ".card{background:white;border-radius:20px;padding:30px;box-shadow:0 10px 30px rgba(0,0,0,0.2);text-align:center;}";
-  css += ".temperatura-card{background:linear-gradient(135deg,#ff6b6b 0%,#ee5a6f 100%);color:white;}.umiditate-card{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:white;}";
-  css += ".value{font-size:4em;font-weight:bold;margin:10px 0;}.unit{font-size:1.5em;opacity:0.8;}";
-  css += ".info-card{background:white;border-radius:20px;padding:25px;margin-bottom:20px;}.info-card h3{color:#667eea;margin-bottom:15px;}";
-  css += ".info-item{display:flex;justify-content:space-between;padding:12px;background:#f8f9fa;border-radius:8px;margin-bottom:10px;}footer{text-align:center;color:white;padding:20px;}";
-  server.send(200, "text/css", css);
-}
+  String json = "{\"temperatura\":

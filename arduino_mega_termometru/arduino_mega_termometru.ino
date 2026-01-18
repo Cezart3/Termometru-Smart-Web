@@ -5,8 +5,8 @@
 DHT dht(DHTPIN, DHTTYPE);
 
 void setup() {
-  Serial.begin(115200);   // Monitorizare pe PC
-  Serial3.begin(9600);    // Comunicare cu ESP32
+  Serial.begin(115200);   
+  Serial3.begin(9600);    
   dht.begin();
   Serial.println("MEGA: Sistem Serial pornit pe Pin 14 (TX3)");
 }
@@ -16,7 +16,6 @@ void loop() {
   float t = dht.readTemperature();
 
   if (!isnan(h) && !isnan(t)) {
-    // Trimitem datele in format simplu: TEMP,HUMIDITY
     Serial3.print(t, 1);
     Serial3.print(",");
     Serial3.println(h, 1);
@@ -26,5 +25,5 @@ void loop() {
   } else {
     Serial.println("ERROR: Senzor deconectat");
   }
-  delay(2000); // Citire la fiecare 2 secunde
+  delay(2000); 
 }
